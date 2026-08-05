@@ -30,7 +30,7 @@ void SimpleGEMM()
 
         for (int i = 0; i < K; i++){
             for (int j = 0; j < N; j++){
-                
+               fin>>B[i][j]; 
             }
         }
 
