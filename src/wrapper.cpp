@@ -39,17 +39,24 @@ int main(){
         }
         case 2:{
             cout<<"Calling CSR Graph Function here."<<endl;
+            ofstream fout("output/csr_output.txt");
+            if (!fout){
+                cout << "Output file cannot be created!" << endl;
+                break;
+            }
             Graph graph = readGraph("input/input.txt");
             CSRGraph csr = buildCSR(graph);
 
             cout<<"Row Ptr :"<<endl;
             for(int x : csr.row_ptr)
-                cout<< x <<" "<<endl;
+                cout<< x<<" ";
 
+            cout<<endl;
             cout<<"COL_IDX :"<<endl;
             for(int x : csr.col_idx)
-                cout<< x <<" "<<endl;
+                cout<< x<<" ";
             
+                cout<<endl;
             if(!csr.values.empty()){
                 cout<<"Values : ";
                 for(int x : csr.values)
