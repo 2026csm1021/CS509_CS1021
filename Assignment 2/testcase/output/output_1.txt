@@ -1,16 +1,14 @@
-Input File: bf_general_1.txt
+Algorithm: Bellman-Ford
 Vertices: 5
 Edges: 7
 Source: 0
-
 Negative Cycle: No
 
 Vertex	Distance
--------------------
 0	0
 1	4
 2	2
 3	9
 4	11
 
-Execution Time: 0.001700 ms
+Execution Time: 0.002400 ms

@@ -1,10 +1,8 @@
-Input File: fw_general_2.txt
+Algorithm: Floyd-Warshall
 Vertices: 6
-
 Negative Cycle: No
 
 Distance Matrix:
-
 0	3	5	9	INF	INF
 INF	0	2	6	INF	INF
 INF	INF	0	4	INF	INF
@@ -12,4 +10,4 @@ INF	INF	INF	0	INF	INF
 INF	INF	INF	INF	0	1
 INF	INF	INF	INF	INF	0
 
-Execution Time: 0.005500 ms
+Execution Time: 0.002900 ms

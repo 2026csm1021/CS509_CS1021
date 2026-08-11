@@ -13,41 +13,43 @@ namespace fs = std::filesystem;
 
 const int INF = numeric_limits<int>::max();
 
-vector<vector<int>> readFloydInput(const string& filename)
+
+// Read Floyd-Warshall input
+vector<vector<int>> readFloydInput(const string& file)
 {
-    ifstream input(filename);
+    ifstream input(file);
 
     if (!input)
-        throw runtime_error("Cannot open file: " + filename);
+        throw runtime_error("Cannot open file: " + file);
 
     int V;
     input >> V;
 
     vector<vector<int>> graph(V, vector<int>(V, INF));
 
-    for (int i = 0; i < V; ++i)
+    for (int i = 0; i < V; i++)
     {
-        for (int j = 0; j < V; ++j)
+        for (int j = 0; j < V; j++)
         {
-            string value;
-            input >> value;
+            string x;
+            input >> x;
 
-            if (value == "INF" || value == "inf")
-                graph[i][j] = INF;
-            else
-                graph[i][j] = stoi(value);
+            graph[i][j] =
+                (x == "INF" || x == "inf") ? INF : stoi(x);
         }
     }
 
     return graph;
 }
 
+
+// Write Bellman-Ford output
 void writeBellmanOutput(
     const string& file,
     const Graph& graph,
     const vector<int>& dist,
     bool negativeCycle,
-    double timeMs)
+    double time)
 {
     ofstream output(file);
 
@@ -62,7 +64,7 @@ void writeBellmanOutput(
     {
         output << "Vertex\tDistance\n";
 
-        for (int v = 0; v < graph.totalVertices; ++v)
+        for (int v = 0; v < graph.totalVertices; v++)
         {
             output << v << "\t";
 
@@ -77,14 +79,16 @@ void writeBellmanOutput(
 
     output << "\nExecution Time: "
            << fixed << setprecision(6)
-           << timeMs << " ms\n";
+           << time << " ms\n";
 }
 
+
+// Write Floyd-Warshall output
 void writeFloydOutput(
     const string& file,
     const vector<vector<int>>& dist,
     bool negativeCycle,
-    double timeMs)
+    double time)
 {
     ofstream output(file);
 
@@ -99,16 +103,16 @@ void writeFloydOutput(
     {
         output << "Distance Matrix:\n";
 
-        for (int i = 0; i < V; ++i)
+        for (int i = 0; i < V; i++)
         {
-            for (int j = 0; j < V; ++j)
+            for (int j = 0; j < V; j++)
             {
                 if (dist[i][j] == INF)
                     output << "INF";
                 else
                     output << dist[i][j];
 
-                if (j + 1 < V)
+                if (j < V - 1)
                     output << "\t";
             }
 
@@ -118,9 +122,11 @@ void writeFloydOutput(
 
     output << "\nExecution Time: "
            << fixed << setprecision(6)
-           << timeMs << " ms\n";
+           << time << " ms\n";
 }
 
+
+// Run Bellman-Ford
 void runBellmanFord(
     const fs::path& inputFile,
     const fs::path& outputFile)
@@ -137,7 +143,7 @@ void runBellmanFord(
 
     auto end = high_resolution_clock::now();
 
-    double timeMs =
+    double time =
         duration<double, milli>(end - start).count();
 
     writeBellmanOutput(
@@ -145,16 +151,13 @@ void runBellmanFord(
         graph,
         dist,
         negativeCycle,
-        timeMs
+        time
     );
 
-    cout << "[BF] "
-         << inputFile.filename().string()
-         << " -> "
-         << outputFile.filename().string()
-         << "\n";
 }
 
+
+// Run Floyd-Warshall
 void runFloydWarshall(
     const fs::path& inputFile,
     const fs::path& outputFile)
@@ -171,23 +174,20 @@ void runFloydWarshall(
 
     auto end = high_resolution_clock::now();
 
-    double timeMs =
+    double time =
         duration<double, milli>(end - start).count();
 
     writeFloydOutput(
         outputFile.string(),
         dist,
         negativeCycle,
-        timeMs
+        time
     );
 
-    cout << "[FW] "
-         << inputFile.filename().string()
-         << " -> "
-         << outputFile.filename().string()
-         << "\n";
 }
 
+
+// Main
 int main()
 {
     try
@@ -195,83 +195,101 @@ int main()
         fs::path inputDir = "testcase/input";
         fs::path outputDir = "testcase/output";
 
-        fs::create_directories(outputDir);
-
         if (!fs::exists(inputDir))
         {
             cerr << "Error: testcase/input not found.\n";
             return 1;
         }
 
-        vector<fs::path> files;
+        fs::create_directories(outputDir);
 
+        vector<fs::path> bfFiles;
+        vector<fs::path> fwFiles;
+
+        // Find input files
         for (const auto& entry : fs::directory_iterator(inputDir))
         {
-            if (entry.is_regular_file() &&
-                entry.path().extension() == ".txt")
-            {
-                files.push_back(entry.path());
-            }
+            if (!entry.is_regular_file() ||
+                entry.path().extension() != ".txt")
+                continue;
+
+            string name = entry.path().stem().string();
+
+            if (name.rfind("bf_input_", 0) == 0)
+                bfFiles.push_back(entry.path());
+
+            else if (name.rfind("fw_input_", 0) == 0)
+                fwFiles.push_back(entry.path());
         }
 
-        sort(files.begin(), files.end());
+        // Sort input files
+        sort(bfFiles.begin(), bfFiles.end());
+        sort(fwFiles.begin(), fwFiles.end());
 
         int outputNumber = 1;
         int bfCount = 0;
         int fwCount = 0;
         int failedCount = 0;
 
-        cout << "\nAssignment 2\n";
-        cout << "-------------\n";
-
-        for (const auto& inputFile : files)
+        // Bellman-Ford
+        for (const auto& inputFile : bfFiles)
         {
-            string name = inputFile.stem().string();
-
-            bool isBF = name.rfind("bf_input_", 0) == 0;
-            bool isFW = name.rfind("fw_input_", 0) == 0;
-
-            if (!isBF && !isFW)
-                continue;
-
-            fs::path outputFile =
-                outputDir /
-                ("output_" +
-                 to_string(outputNumber) +
-                 ".txt");
-
             try
             {
-                if (isBF)
-                {
-                    runBellmanFord(inputFile, outputFile);
-                    ++bfCount;
-                }
-                else
-                {
-                    runFloydWarshall(inputFile, outputFile);
-                    ++fwCount;
-                }
+                fs::path outputFile =
+                    outputDir /
+                    ("output_" + to_string(outputNumber) + ".txt");
 
-                ++outputNumber;
+                runBellmanFord(inputFile, outputFile);
+
+                outputNumber++;
+                bfCount++;
             }
             catch (const exception& e)
             {
                 cerr << "[ERROR] "
-                     << inputFile.filename().string()
+                     << inputFile.filename()
                      << ": "
-                     << e.what() << "\n";
+                     << e.what()
+                     << "\n";
 
-                ++failedCount;
+                failedCount++;
             }
         }
 
-        cout << "\nSummary\n";
-        cout << "-------\n";
+        // Floyd-Warshall
+        for (const auto& inputFile : fwFiles)
+        {
+            try
+            {
+                fs::path outputFile =
+                    outputDir /
+                    ("output_" + to_string(outputNumber) + ".txt");
+
+                runFloydWarshall(inputFile, outputFile);
+
+                outputNumber++;
+                fwCount++;
+            }
+            catch (const exception& e)
+            {
+                cerr << "[ERROR] "
+                     << inputFile.filename()
+                     << ": "
+                     << e.what()
+                     << "\n";
+
+                failedCount++;
+            }
+        }
+
+        // Summary
+        cout << "\n-------------------------\n";
         cout << "Bellman-Ford   : " << bfCount << "\n";
         cout << "Floyd-Warshall : " << fwCount << "\n";
         cout << "Failed         : " << failedCount << "\n";
         cout << "Output folder  : testcase/output\n";
+        cout << "-------------------------\n";
 
         return failedCount == 0 ? 0 : 1;
     }
