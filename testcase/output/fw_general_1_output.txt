@@ -1,0 +1,18 @@
+========================================
+        FLOYD-WARSHALL RESULTS
+========================================
+
+Input File: fw_general_1.txt
+Vertices: 5
+
+Negative Cycle: No
+
+Distance Matrix:
+
+0	4	2	9	11
+INF	0	1	5	7
+INF	INF	0	8	10
+INF	INF	INF	0	2
+INF	INF	INF	INF	0
+
+Execution Time: 0.004100 ms
