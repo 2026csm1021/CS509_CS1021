@@ -15,10 +15,6 @@ namespace fs = std::filesystem;
 const int INF = numeric_limits<int>::max();
 
 
-// ============================================================
-// Read Floyd-Warshall input file
-// ============================================================
-
 vector<vector<int>> readFloydInput(const string& filename)
 {
     ifstream input(filename);
@@ -61,11 +57,6 @@ vector<vector<int>> readFloydInput(const string& filename)
     return graph;
 }
 
-
-// ============================================================
-// Write Bellman-Ford output
-// ============================================================
-
 void writeBellmanOutput(
     const string& outputFile,
     const string& inputFile,
@@ -82,10 +73,6 @@ void writeBellmanOutput(
             "Cannot create output file: " + outputFile
         );
     }
-
-    output << "========================================\n";
-    output << "          BELLMAN-FORD RESULTS\n";
-    output << "========================================\n\n";
 
     output << "Input File: " << inputFile << "\n";
     output << "Vertices: " << graph.totalVertices << "\n";
@@ -124,10 +111,6 @@ void writeBellmanOutput(
 }
 
 
-// ============================================================
-// Write Floyd-Warshall output
-// ============================================================
-
 void writeFloydOutput(
     const string& outputFile,
     const string& inputFile,
@@ -145,10 +128,6 @@ void writeFloydOutput(
     }
 
     int V = static_cast<int>(dist.size());
-
-    output << "========================================\n";
-    output << "        FLOYD-WARSHALL RESULTS\n";
-    output << "========================================\n\n";
 
     output << "Input File: " << inputFile << "\n";
     output << "Vertices: " << V << "\n\n";
@@ -186,27 +165,18 @@ void writeFloydOutput(
 }
 
 
-// ============================================================
-// Run Bellman-Ford
-// ============================================================
-
 void runBellmanFord(
     const fs::path& inputPath,
     const fs::path& outputPath)
 {
-    // Read graph
-    Graph graph =
-        readGraph(inputPath.string());
 
-    // Convert to CSR BEFORE timing
-    CSRGraph csr =
-        CSR(graph);
+    Graph graph = readGraph(inputPath.string());
+
+    CSRGraph csr = CSR(graph);
 
     bool negativeCycle = false;
 
-    // Start algorithm timing
-    auto start =
-        high_resolution_clock::now();
+    auto start = high_resolution_clock::now();
 
     vector<int> dist =
         bellmanFord(
@@ -215,15 +185,13 @@ void runBellmanFord(
             negativeCycle
         );
 
-    auto end =
-        high_resolution_clock::now();
+    auto end = high_resolution_clock::now();
 
     double timeMs =
         duration<double, milli>(
             end - start
         ).count();
 
-    // Save result
     writeBellmanOutput(
         outputPath.string(),
         inputPath.filename().string(),
@@ -241,15 +209,12 @@ void runBellmanFord(
 }
 
 
-// ============================================================
-// Run Floyd-Warshall
-// ============================================================
 
 void runFloydWarshall(
     const fs::path& inputPath,
     const fs::path& outputPath)
 {
-    // Read dense matrix directly
+
     vector<vector<int>> graph =
         readFloydInput(
             inputPath.string()
@@ -257,7 +222,6 @@ void runFloydWarshall(
 
     bool negativeCycle = false;
 
-    // Start algorithm timing
     auto start =
         high_resolution_clock::now();
 
@@ -275,8 +239,7 @@ void runFloydWarshall(
             end - start
         ).count();
 
-    // Save result
-    writeFloydOutput(
+        writeFloydOutput(
         outputPath.string(),
         inputPath.filename().string(),
         dist,
@@ -292,23 +255,16 @@ void runFloydWarshall(
 }
 
 
-// ============================================================
-// MAIN
-// ============================================================
-
 int main()
 {
     try
     {
-        // Your exact folder structure
         fs::path inputDirectory =
             "testcase/input";
 
         fs::path outputDirectory =
             "testcase/output";
 
-
-        // Create output folder automatically
         fs::create_directories(
             outputDirectory
         );
@@ -319,12 +275,6 @@ int main()
             cerr << "Error: testcase/input folder not found.\n";
             return 1;
         }
-
-
-        cout << "\n";
-        cout << "========================================\n";
-        cout << "             ASSIGNMENT 2\n";
-        cout << "========================================\n\n";
 
         int bfCount = 0;
         int fwCount = 0;
@@ -354,9 +304,6 @@ int main()
 
             try
             {
-                // -------------------------------
-                // Bellman-Ford
-                // -------------------------------
 
                 if (stem.rfind("bf_", 0) == 0)
                 {
@@ -368,11 +315,6 @@ int main()
                     ++bfCount;
                 }
 
-
-                // -------------------------------
-                // Floyd-Warshall
-                // -------------------------------
-
                 else if (stem.rfind("fw_", 0) == 0)
                 {
                     runFloydWarshall(
@@ -382,11 +324,6 @@ int main()
 
                     ++fwCount;
                 }
-
-
-                // -------------------------------
-                // Unknown file
-                // -------------------------------
 
                 else
                 {
@@ -406,11 +343,6 @@ int main()
                 ++failedCount;
             }
         }
-
-
-        // ====================================================
-        // Summary
-        // ====================================================
 
         cout << "Bellman-Ford tests  : "
              << bfCount << "\n";

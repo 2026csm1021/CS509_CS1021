@@ -8,10 +8,8 @@ CSRGraph CSR(const Graph& G)
 
     csr.Vertices = V;
 
-    // CSR row pointer: V + 1 elements
     csr.row_ptr.resize(V + 1);
 
-    // Build row_ptr
     csr.row_ptr[0] = 0;
 
     for (int u = 0; u < V; ++u)
@@ -27,7 +25,6 @@ CSRGraph CSR(const Graph& G)
     csr.col_idx.resize(E);
     csr.values.resize(E);
 
-    // Fill column indices and edge weights
     int index = 0;
 
     for (int u = 0; u < V; ++u)
