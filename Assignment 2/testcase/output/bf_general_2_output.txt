@@ -1,0 +1,17 @@
+Input File: bf_general_2.txt
+Vertices: 6
+Edges: 4
+Source: 0
+
+Negative Cycle: No
+
+Vertex	Distance
+-------------------
+0	0
+1	3
+2	5
+3	9
+4	INF
+5	INF
+
+Execution Time: 0.001400 ms

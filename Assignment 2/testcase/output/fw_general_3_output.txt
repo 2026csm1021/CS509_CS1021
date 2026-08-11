@@ -1,0 +1,14 @@
+Input File: fw_general_3.txt
+Vertices: 5
+
+Negative Cycle: No
+
+Distance Matrix:
+
+0	2	7	4	-2
+-2	0	5	2	-4
+-7	-5	0	-3	-9
+-4	-2	3	0	-6
+2	4	9	6	0
+
+Execution Time: 0.005000 ms
