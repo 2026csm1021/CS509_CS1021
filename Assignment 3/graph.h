@@ -15,6 +15,7 @@ struct Graph {
 
     vector<vector<Edge>> adjacency;
 };
+
 Graph readGraph(const string& filename);
 
 #endif
