@@ -27,7 +27,9 @@ Graph readGraph(string fileName)
         {
             int neighbour;
             file >> neighbour;
-            graph.adjacencyList[vertex].push_back(neighbour);
+            // Assignment 1's graph input is unweighted.  Store a unit value
+            // so it matches the weighted adjacency-list type in csr.h.
+            graph.adjacencyList[vertex].push_back({neighbour, 1});
         }
     }
 
@@ -47,8 +49,11 @@ CSRGraph buildCSR(Graph graph)
 
     for (int i = 0; i < graph.totalVertices; i++)
     {
-        for (int neighbour : graph.adjacencyList[i])
+        for (const auto& [neighbour, value] : graph.adjacencyList[i])
+        {
             csr.col_idx.push_back(neighbour);
+            csr.values.push_back(value);
+        }
 
         csr.row_ptr.push_back(csr.col_idx.size());
     }

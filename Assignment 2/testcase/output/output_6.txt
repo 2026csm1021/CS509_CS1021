@@ -9,4 +9,4 @@ Distance Matrix:
 -4	-2	3	0	-6
 2	4	9	6	0
 
-Execution Time: 0.004500 ms
+Execution Time: 0.006800 ms

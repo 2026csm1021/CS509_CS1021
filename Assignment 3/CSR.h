@@ -1,14 +1,21 @@
 #ifndef CSR_H
 #define CSR_H
-#include<bits/stdc++.h>
+
+#include <vector>
+#include "Graph.h"
+
 using namespace std;
 
-struct{
+struct CSR
+{
+    int V;
+    int E;
+
     vector<int> row_ptr;
     vector<int> col_idx;
     vector<int> values;
 };
 
-
+CSR convertToCSR(const Graph& graph);
 
 #endif

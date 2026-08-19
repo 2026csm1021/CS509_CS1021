@@ -9,4 +9,4 @@ INF	INF	0	8	10
 INF	INF	INF	0	2
 INF	INF	INF	INF	0
 
-Execution Time: 0.012700 ms
+Execution Time: 0.005000 ms

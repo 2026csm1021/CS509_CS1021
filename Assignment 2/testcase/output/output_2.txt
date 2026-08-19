@@ -12,4 +12,4 @@ Vertex	Distance
 4	INF
 5	INF
 
-Execution Time: 0.001800 ms
+Execution Time: 0.002000 ms

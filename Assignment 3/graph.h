@@ -1,21 +1,21 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include<bits/stdc++.h>
+#include <vector>
+#include <utility>
+#include <string>
+
 using namespace std;
 
-struct Edge {
-    int neighbour;
-    int weight;
-};
+struct Graph
+{
+    int V;
+    int E;
 
-struct Graph {
-    int vertices;
-    int Edges;
-
-    vector<vector<Edge>> adjacency;
+    vector<vector<pair<int, int>>> adj;
 };
 
 Graph readGraph(const string& filename);
+void validateGraph(const Graph& graph);
 
 #endif
