@@ -14,6 +14,6 @@ struct CSR{
     vector<int> col_idx;
 };
 
-CSR csr(const Graph& graph);
+CSR convertToCSR(const Graph& graph);
 
 #endif

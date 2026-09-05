@@ -21,7 +21,7 @@ int runInDirectory(const fs::path& directory, const std::string& command)
 
 int runAssignment1(const fs::path& root)
 {
-    const fs::path temporaryExecutable = fs::temp_directory_path() / "cs509_assignment1.exe";
+    const fs::path temporaryExecutable = fs::temp_directory_path() / "CS509_Assignment1.exe";
     const std::string buildAndRun =
         "g++ -std=c++17 -Iinclude src/wrapper.cpp src/gemm.cpp src/csr.cpp src/main.cpp "
         "-o \"" + temporaryExecutable.string() + "\" && \"" +
@@ -32,7 +32,7 @@ int runAssignment1(const fs::path& root)
 
 int runAssignment2(const fs::path& root)
 {
-    const fs::path temporaryExecutable = fs::temp_directory_path() / "cs509_assignment2.exe";
+    const fs::path temporaryExecutable = fs::temp_directory_path() / "CS509_Assignment2.exe";
     const std::string buildAndRun =
         "g++ -std=c++17 driver.cpp graph.cpp csr.cpp bellmanFord.cpp Floyd_Warshall.cpp "
         "-o \"" + temporaryExecutable.string() + "\" && \"" +
@@ -43,7 +43,7 @@ int runAssignment2(const fs::path& root)
 
 int runAssignment3(const fs::path& root)
 {
-    const fs::path temporaryExecutable = fs::temp_directory_path() / "cs509_assignment3.exe";
+    const fs::path temporaryExecutable = fs::temp_directory_path() / "CS509_Assignment3.exe";
     const std::string buildAndRun =
         "g++ -std=c++17 Driver.cpp CSR.cpp DSU.cpp graph.cpp kruskal.cpp prim.cpp "
         "-o \"" + temporaryExecutable.string() + "\" && \"" +
@@ -52,11 +52,23 @@ int runAssignment3(const fs::path& root)
     return runInDirectory(root / "Assignment 3", buildAndRun);
 }
 
+int runAssignment4(const fs::path& root)
+{
+    const fs::path temporaryExecutable = fs::temp_directory_path() / "CS509_Assignment4.exe";
+    const std::string buildAndRun = 
+        "g++ -std=c++17 Driver.cpp CSR.cpp vector_coloring.cpp graph.cpp page_rank.cpp "
+        "-o \"" + temporaryExecutable.string() + "\" && \"" +
+        temporaryExecutable.string() + "\"";
+    
+    return runInDirectory(root / "Assignment 4", buildAndRun);
+}
+
 bool isProjectRoot(const fs::path& directory)
 {
     return fs::exists(directory / "Assignment 1") &&
            fs::exists(directory / "Assignment 2") &&
-           fs::exists(directory / "Assignment 3");
+           fs::exists(directory / "Assignment 3") &&
+           fs::exists(directory / "Assignment 4");
 }
 
 } 
@@ -82,6 +94,7 @@ int main(int argc, char* argv[])
                   << "1. Assignment 1 (GEMM / CSR)\n"
                   << "2. Assignment 2 (Bellman-Ford / Floyd-Warshall)\n"
                   << "3. Assignment 3 (Kruskal / Prim MST)\n"
+                  << "4. Assignment 4 (Vertex Coloring / Page Rank)\n"
                   << "0. Exit\n"
                   << "Enter choice: ";
 
@@ -105,6 +118,9 @@ int main(int argc, char* argv[])
             break;
         case 3:
             result = runAssignment3(root);
+            break;
+        case 4:
+            result = runAssignment4(root);
             break;
         case 0:
             return 0;

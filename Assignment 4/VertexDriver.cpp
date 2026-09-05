@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <vector>
 
 #include "Graph.h"
 #include "CSR.h"
@@ -18,23 +19,16 @@ int main()
 
     try
     {
-        // 1. Read graph
         Graph graph = readGraph(filename);
 
-        // 2. Validate graph
         validateGraph(graph);
 
-        // 3. Convert to CSR
-        // Preprocessing is outside algorithm timing
         CSR csr = convertToCSR(graph);
 
-        // 4. Start timer
         auto startTime = high_resolution_clock::now();
 
-        // 5. Run Vertex Coloring
         vector<int> colors = vertexColoring(csr);
 
-        // 6. Stop timer
         auto endTime = high_resolution_clock::now();
 
         double timeTaken =
@@ -42,7 +36,6 @@ int main()
                 endTime - startTime
             ).count();
 
-        // 7. Find number of colors
         int numberOfColors = 0;
 
         for (int i = 0; i < csr.V; i++)
@@ -53,7 +46,6 @@ int main()
             }
         }
 
-        // 8. Print colors
         cout << "\nVertex Coloring:\n";
 
         for (int i = 0; i < csr.V; i++)
@@ -65,12 +57,10 @@ int main()
                  << endl;
         }
 
-        // 9. Print number of colors
         cout << "\nNumber of Colors: "
              << numberOfColors
              << endl;
 
-        // 10. Print timing
         cout << "Coloring Time: "
              << timeTaken
              << " ms"

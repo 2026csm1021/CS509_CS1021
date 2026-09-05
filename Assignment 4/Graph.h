@@ -1,15 +1,22 @@
 #ifndef GRAPH_H
 #define GRAPH_H
-#include<string>
-#include<vector>
+
+#include <vector>
+#include <string>
 
 using namespace std;
 
-struct Graph {
+struct Graph
+{
     int V;
     int E;
 
     vector<vector<int>> adj;
+
+    // PageRank parameters
+    double damping;
+    double tolerance;
+    int maxIterations;
 };
 
 Graph readGraph(const string& filename);
