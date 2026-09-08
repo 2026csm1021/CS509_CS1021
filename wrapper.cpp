@@ -55,11 +55,11 @@ int runAssignment3(const fs::path& root)
 int runAssignment4(const fs::path& root)
 {
     const fs::path temporaryExecutable = fs::temp_directory_path() / "CS509_Assignment4.exe";
-    const std::string buildAndRun = 
-        "g++ -std=c++17 Driver.cpp CSR.cpp vector_coloring.cpp graph.cpp page_rank.cpp "
+    const std::string buildAndRun =
+        "g++ -std=c++17 Driver.cpp CSR.cpp Graph.cpp VertexColoring.cpp PageRank.cpp "
         "-o \"" + temporaryExecutable.string() + "\" && \"" +
         temporaryExecutable.string() + "\"";
-    
+
     return runInDirectory(root / "Assignment 4", buildAndRun);
 }
 
@@ -71,7 +71,7 @@ bool isProjectRoot(const fs::path& directory)
            fs::exists(directory / "Assignment 4");
 }
 
-} 
+}
 
 int main(int argc, char* argv[])
 {
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
                   << "1. Assignment 1 (GEMM / CSR)\n"
                   << "2. Assignment 2 (Bellman-Ford / Floyd-Warshall)\n"
                   << "3. Assignment 3 (Kruskal / Prim MST)\n"
-                  << "4. Assignment 4 (Vertex Coloring / Page Rank)\n"
+                  << "4. Assignment 4 (Vertex Coloring / PageRank)\n"
                   << "0. Exit\n"
                   << "Enter choice: ";
 
